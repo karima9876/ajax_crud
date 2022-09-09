@@ -7,4 +7,5 @@ use App\Http\Controllers\ProductController;
 //     return view('products');
 // });
 Route::get('/',[ProductController::class,'products'])->name('products');  
+Route::post('/add-product',[ProductController::class,'addProduct'])->name('add.product');  
 
