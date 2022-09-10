@@ -1,5 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     <script>
       $.ajaxSetup({
     headers: {
@@ -24,6 +25,24 @@
               $('#addModal').modal('hide');
               $('#addProductForm')[0].reset();
               $('.table').load(location.href+' .table');
+              Command: toastr["success"]("Product Added","Success")
+                  toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                  }
 
             }
           },error:function(err){
@@ -46,9 +65,8 @@
         $('#up_name').val(name);
         $('#up_price').val(price);
       });
-
-      //update product data
-      $(document).on('click','.update_product',function(e){
+       //update product data
+       $(document).on('click','.update_product',function(e){
        //alert('hello');
         e.preventDefault();
         let up_id=$('#up_id').val();
@@ -64,6 +82,24 @@
               $('#updateModal').modal('hide');
               $('#updateProductForm')[0].reset();
               $('.table').load(location.href+' .table');
+              Command: toastr["success"]("Product Updated","Success")
+                  toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                  }
 
             }
           },error:function(err){
@@ -76,6 +112,74 @@
           }
         });
       })
+       //Delete product data
+       $(document).on('click','.delete_product',function(e){
+       //alert('hello');
+        e.preventDefault();
+        let product_id=$(this).data('id');
+        if(confirm('Are you sure to delete prodduct?')){
+          $.ajax({
+            url:"{{route('delete.product')}}",
+            method:'post',
+            data:{product_id:product_id},
+            success:function(res){
+              if(res.status=='success'){
+                $('.table').load(location.href+' .table');
+                Command: toastr["success"]("Product Deleted","Success")
+                  toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                  }
+
+              }
+            }
+          });
+       }    
+     })
+     //pagination
+     $(document).on('click','.pagination a', function(e){
+      e.preventDefault();
+      let page=$(this).attr('href').split('page=')[1]
+      product(page)
+     })
+     function product(page){
+      $.ajax({
+        url:"/pagination/paginate-data?page="+page,
+        success:function(res){
+          $('.table-data').html(res);
+        }
+      })
+     }
+     //search product
+     $(document).on('keyup',function(e){
+      e.preventDefault();
+      let search_string=$('#search').val();
+      $.ajax({
+        url:"{{route('search.product')}}",
+        method:'GET',
+        data:{search_string:search_string},
+        success:function(res){
+          $('.table-data').html(res);
+          if(res.status=='nothing_found'){
+            $('.table-data').html('<span class="text-danger">'+'Nothing Found'+'</span>');
+          }
+        }
+      })
+
+     })
 
 
       });

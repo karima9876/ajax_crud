@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <title>Ajax Crud</title>
   </head>
   <body>
@@ -17,6 +18,7 @@
             <div class="col-md-8">
                 <h2 class="my-5 text-center">Laravel 9 Ajax Crud</h2>
                 <a href="" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Product</a>
+                <input type="text" name="search" id="search" class="mb-3 form-control" placeholder="Search Here....">
                 <div class="table-data">
                     <table class="table table-bordered">
                         <thead>
@@ -44,7 +46,10 @@
                                  >
                                  <i class="las la-edit"></i>
                                 </a>
-                                <a href="" class="btn btn-danger"><i class="las la-times"></i></i></a>
+                                <a href="" 
+                                class="btn btn-danger delete_product"
+                                data-id="{{$product->id}}"><i class="las la-times"></i>
+                              </a>
                             </td>
                           </tr>
                           @endforeach
@@ -61,5 +66,6 @@
     @include('add_product_modal')
     @include('update_product_modal')
     @include('product_js')
+    {!! Toastr::message() !!}
   </body>
 </html>
